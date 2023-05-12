@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <title>비전5 영화</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Nanum+Myeongjo&display=swap');
+
+        * {
+            font-family: 'Gowun Dodum', sans-serif;
+            font-family: 'Nanum Myeongjo', serif;
+        }
+
+        .mylogo {
+            text-indent: 25px;
+
+            position: fixed;
+
+            color: black;
+            background-color: #fff;
+
+            width: 100%;
+            height: 150px;
+            top: 0%;
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+
+            z-index: 3;
+            text-decoration: none;
+        }
+
+        .mylogo > h1 > a {
+            color: black;
+            font-size: 40px;
+            font-weight: bold;
+            font-family: 'Gowun Dodum', sans-serif;
+            text-decoration: none;
+        }
+        
+        .mypost {
+            width: 1200px;
+            margin: 20px auto 20px auto;
+            padding: 20px 20px 20px 20px;
+            box-shadow: 0px 0px 3px 0px gray;
+        }
+
+        .mytitle {
+            width: 1150px;
+            height: 600px;
+            margin: 20px auto 20px auto;
+            padding: 20px 20px 20px 20px;
+            border: solid 2px;
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mytxt {
+            width: 1150px;
+            height: auto;
+
+            text-align: center;
+            margin: 20px auto 20px auto;
+            padding: 20px 20px 20px 20px;
+            border: solid 2px;
+        }
+
+        .mybtn>button:hover {
+            border: 2px solid black;
+        }
+
+        .mybtn {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mybtn>button {
+            width: 150px;
+            height: 50px;
+            background-color: transparent;
+            border: 1px solid black;
+            color: black;
+            border-radius: 50px;
+            margin-top: 20px;
+            margin-right: 30px;
+        }
+
+        .mytitle2 {
+            width: 1200px;
+            height: 400px;
+        }
+
+        .myposter {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-right: 30px;
+        }
+
+        .btn-outline-dark {
+            width:70px;
+        }
+    </style>
+    <script>
+        // //DB에서 영화 정보를 가져 온 후 출력
+        $(document).ready(function () {
+            show_order2();
+        });
+
+        function show_order2() {
+            fetch("/movies1").then(res => res.json()).then(data => {
+                let rows = data['result1']
+                $('#movies').empty()
+                rows.forEach((a) => {
+                    let title = a['title']
+                    let desc = a['desc']
+                    let image = a['image']
+                    let comment = a['comment']
+                    let star = a['star']
+                    let director = a['director']
+                    let character1 = a['character1']
+                    let character2 = a['character2']
+                    let character3 = a['character3']
+
+                    let stars = ('⭐').repeat(star)
+
+                    let temp_html1 = `<div class="mytitle">
+                                            <br>
+                                            <div class="myposter">
+                                                <br>
+                                                <div><img src="${image}" style="width:300px; height:400px;" /> </div>
+                                                <br>
+                                                <div>
+                                                    <h1> ${stars} </h1>
+                                                </div>
+                                            </div>
+
+                                            <div class="mytitle2">
+                                                <div>
+                                                    <h1><b> ${title} </b></h1>
+                                                </div>
+                                                <br>
+                                                <div>
+                                                    <h4> ${desc} </h4>
+                                                </div>
+                                                <br>
+                                                <div>
+                                                    <h4>
+                                                        감독 : ${director} <br>
+                                                        출연진1 : ${character1}<br>
+                                                        출연진2 : ${character2}<br>
+                                                        출연진3 : ${character3}<br>
+                                                    </h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mytxt">
+                                            <h5> 영화 추천인 코멘트 : ${comment} </h5>
+                                        </div>
+
+                                        <div class="mytxt">
+                                            <h3><b> 개인 관람평 </b></h3>
+                                            <div class="form-floating mb-3">
+                                                <input type="text" class="form-control" id="name" placeholder="url" />
+                                                <label for="floatingInput">닉네임</label>
+                                            </div>
+                                            <div class="form-floating">
+                                                <textarea class="form-control" placeholder="Leave a comment here" id="comment"
+                                                    style="height: 100px"></textarea>
+                                                <label for="floatingTextarea2">관람평</label>
+                                            </div>
+                                            <div class="mybtn">
+                                                <button onclick="save()" type="button" class="btn btn-outline-dark">등록하기</button>
+                                            </div>
+
+                                            <br>
+
+                                            <table class="table">
+                                                <thead id = "subB1">
+                                                    <tr >
+                                                        <th scope="col">닉네임</th>
+                                                        <th scope="col">관람평</th>
+                                                        <th scope="col">삭제</th>
+                                                    </tr>
+                                                </thead>
+                                        </div>`
+                    $('#movies').append(temp_html1)
+                })
+            })
+        }
+
+
+        // --------------관람평 등록, 삭제----------------------
+        // B : 데이터 받기 
+        $(document).ready(function () {
+            show_order();
+        });
+        function show_order() {
+            fetch("/subB1").then(res => res.json()).then(data => {
+                let rows = data['result']
+
+                rows.forEach((a) => {
+                    let id = a['id']
+                    let comment = a['comment']
+
+                    // 데이터 입력
+                    let temp_html = `<tr>
+                                    <td>${id}</td> 
+                                    <td> ${comment} </td>
+                                    <td> <button onclick ="del('${id}'+'${comment}')" class="btn btn-outline-dark">삭제</button></td>
+                                    </tr>`
+                    $('#subB1').append(temp_html)
+                })
+            })
+        }
+
+        //  A : 데이터 보내기
+        function save() {
+            let id = $('#name').val()
+            let comment = $('#comment').val()
+
+            let formData = new FormData()
+            formData.append("id_give", id)
+            formData.append("comment_give", comment)
+
+            fetch("/subA1", { method: "post", body: formData }).then(res => res.json()).then(data => {
+                alert(data['msg'])
+                window.location.reload()
+            })
+        }
+
+        // 데이터 삭제 기능
+        function del(a) {
+            let formData = new FormData()
+            let id = a
+            formData.append("id_del", id)
+
+            fetch("/subC1", { method: "post", body: formData }).then(res => res.json()).then(data => {
+                alert(data['del'])
+                window.location.reload()
+            })
+        }
+
+
+    </script>
+</head>
+
+<body>
+    <div class="mylogo" id="mylogo">
+        <br>
+        <h1><a href={{url_for('home')}}>비전5 Movie</a> </h1>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="mypost" id="movies">
+        <div class="mytitle" >
+            <br>
+            <div class="myposter">
+                <br>
+                <div><img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                        style="width:300px; height:400px;" /> </div>
+                <div>
+                    <h1> ⭐⭐⭐ </h1>
+                </div>
+            </div>
+
+            <div class="mytitle2">
+                <div>
+                    <h1> 제목 : 제목 </h1>
+                </div>
+                <br>
+                <div>
+                    <h3> 상세설명 : 상세설명 </h3>
+                </div>
+                <br>
+                <div>
+                    <h3> 감독/출연진 : 감독/출연진 </h3>
+                </div>
+            </div>
+        </div>
+        <div class="mytxt">
+            <h5> 코멘트 </h5>
+        </div>
+
+        <div class="mytxt">
+            <h1> 개인 관람평 </h1>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="name" placeholder="url" />
+                <label for="floatingInput">닉네임</label>
+            </div>
+            <div class="form-floating">
+                <textarea class="form-control" placeholder="Leave a comment here" id="comment"
+                    style="height: 100px"></textarea>
+                <label for="floatingTextarea2">관람평</label>
+            </div>
+            <div class="mybtn">
+                <button type="button" class="btn btn-outline-dark">등록하기</button>
+            </div>
+
+            <br>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">닉네임</th>
+                        <th scope="col">관람평</th>
+                        <th scope="col">삭제</th>
+                    </tr>
+                </thead>
+        </div>
+    </div>
+</body>
